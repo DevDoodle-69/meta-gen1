@@ -1,0 +1,172 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 245 30% 5%;
+    --foreground: 240 5% 96%;
+
+    --card: 245 30% 8%;
+    --card-foreground: 240 5% 96%;
+
+    --popover: 245 30% 7%;
+    --popover-foreground: 240 5% 96%;
+
+    --primary: 260 30% 60%;
+    --primary-foreground: 240 5% 96%;
+
+    --secondary: 250 25% 25%;
+    --secondary-foreground: 240 5% 96%;
+
+    --muted: 250 25% 15%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 265 40% 55%;
+    --accent-foreground: 240 5% 96%;
+
+    --destructive: 0 80% 50%;
+    --destructive-foreground: 240 5% 96%;
+
+    --border: 245 25% 20%;
+    --input: 245 25% 20%;
+    --ring: 260 30% 60%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+  font-display: swap;
+}
+
+@layer base {
+  * {
+    @apply border-border selection:bg-accent/20 selection:text-foreground;
+  }
+  
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+    @apply scroll-smooth antialiased;
+  }
+  
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(110, 89, 165, 0.1) 0%,
+      rgba(26, 31, 44, 0.8) 100%
+    );
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-background/30 backdrop-blur-xl border border-white/5 shadow-glass transition-all duration-300;
+  }
+  
+  .glass-hover {
+    @apply hover:bg-background/40 hover:backdrop-blur-xl hover:shadow-glass-hover transition-all duration-300;
+  }
+  
+  .glass-dark {
+    @apply bg-background/60 backdrop-blur-xl border border-white/5 shadow-glass;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-br from-white via-white/95 to-white/70 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-purple {
+    @apply bg-gradient-to-br from-purple-300 via-purple-400 to-accent bg-clip-text text-transparent;
+  }
+  
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  .animate-delay-1000 {
+    animation-delay: 1000ms;
+  }
+}
+
+.audio-bar {
+  @apply bg-accent h-full w-1 rounded-full opacity-80 mx-[1px] transform transition-transform duration-300;
+  animation: wave 1.2s ease infinite;
+}
+
+.audio-bar:nth-child(1) { animation-delay: 0.0s; }
+.audio-bar:nth-child(2) { animation-delay: 0.1s; }
+.audio-bar:nth-child(3) { animation-delay: 0.2s; }
+.audio-bar:nth-child(4) { animation-delay: 0.3s; }
+.audio-bar:nth-child(5) { animation-delay: 0.4s; }
+.audio-bar:nth-child(6) { animation-delay: 0.3s; }
+.audio-bar:nth-child(7) { animation-delay: 0.2s; }
+.audio-bar:nth-child(8) { animation-delay: 0.1s; }
+.audio-bar:nth-child(9) { animation-delay: 0.0s; }
+.audio-bar:nth-child(10) { animation-delay: 0.1s; }
+.audio-bar:nth-child(11) { animation-delay: 0.2s; }
+.audio-bar:nth-child(12) { animation-delay: 0.3s; }
+.audio-bar:nth-child(13) { animation-delay: 0.4s; }
+.audio-bar:nth-child(14) { animation-delay: 0.3s; }
+.audio-bar:nth-child(15) { animation-delay: 0.2s; }
+.audio-bar:nth-child(16) { animation-delay: 0.1s; }
+
+.button-glow {
+  @apply relative;
+}
+
+.button-glow::after {
+  content: '';
+  @apply absolute inset-0 rounded-full bg-primary/20 blur-xl opacity-0 transition-opacity duration-500;
+}
+
+.button-glow:hover::after {
+  @apply opacity-100;
+}
+
+.shimmer {
+  @apply relative overflow-hidden;
+}
+
+.shimmer::before {
+  content: '';
+  @apply absolute top-0 -left-[100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+.input-highlight {
+  @apply relative;
+}
+
+.input-highlight::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-full h-[2px] bg-accent scale-x-0 origin-left transition-transform duration-300;
+}
+
+.input-highlight:focus-within::after {
+  @apply scale-x-100;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(110, 89, 165, 0.5);
+}
