@@ -1,3 +1,4 @@
+
 interface GenerateMusicParams {
   title: string;
   lyrics: string;
@@ -24,23 +25,57 @@ interface TaskStatusResponse {
 
 export const generateMusic = async ({ title, lyrics, style }: GenerateMusicParams): Promise<GenerateMusicResponse> => {
   const url = `https://api.paxsenix.biz.id/tools/suno?title=${encodeURIComponent(title)}&lyrics=${encodeURIComponent(lyrics)}&style=${encodeURIComponent(style)}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-  return response.json();
-};
-
-export const checkTaskStatus = async (taskUrl: string): Promise<TaskRecord[]> => {
-  while (true) {
-    const response = await fetch(taskUrl);
-    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-    const taskData: TaskStatusResponse = await response.json();
-    if (taskData.status === "done") return taskData.records.slice(0, 2);
-    await new Promise(resolve => setTimeout(resolve, 5000));
+  
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error generating music:', error);
+    throw error;
   }
 };
 
+export const checkTaskStatus = async (taskUrl: string): Promise<TaskStatusResponse> => {
+  try {
+    const response = await fetch(taskUrl);
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error checking task status:', error);
+    throw error;
+  }
+};
+
+// This is just a sample list of styles that Suno AI supports
 export const musicStyles = [
-  "Pop", "Rock", "Hip Hop", "R&B", "Electronic", "Jazz", "Classical", "Country", "Folk",
-  "Metal", "Indie", "Ambient", "Blues", "Reggae", "Disco", "Funk", "Soul", "Techno",
-  "House", "Dubstep", "80s Pop", "90s Hip Hop", "Lo-fi", "Trap"
-];
+  "Pop",
+  "Rock",
+  "Hip Hop",
+  "R&B",
+  "Electronic",
+  "Jazz",
+  "Classical",
+  "Country",
+  "Folk",
+  "Metal",
+  "Indie",
+  "Ambient",
+  "Blues",
+  "Reggae",
+  "Disco",
+  "Funk",
+  "Soul",
+  "Techno",
+  "House",
+  "Dubstep",
+  "80s Pop",
+  "90s Hip Hop",
+  "Lo-fi",
+  "Trap"
+]; 
+
