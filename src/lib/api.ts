@@ -23,7 +23,7 @@ interface TaskStatusResponse {
 }
 
 export const generateMusic = async ({ title, lyrics, style }: GenerateMusicParams): Promise<GenerateMusicResponse> => {
-  const url = `https://api.paxsenix.biz.id/tools/suno?title=${encodeURIComponent(title)}&lyrics=${encodeURIComponent(lyrics)}&style=${encodeURIComponent(style)}`;
+  const url = `https://api.paxsenix.biz.id/ai-tools/suno?title=${encodeURIComponent(title)}&lyrics=${encodeURIComponent(lyrics)}&style=${encodeURIComponent(style)}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
   return response.json();
