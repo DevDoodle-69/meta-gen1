@@ -18,23 +18,64 @@ interface TaskRecord {
 }
 
 interface TaskStatusResponse {
-  status: string;
+  status: 'pending' | 'done' | 'error';
   records: TaskRecord[];
 }
 
 export const generateMusic = async ({ title, lyrics, style }: GenerateMusicParams): Promise<GenerateMusicResponse> => {
   const url = `https://api.paxsenix.biz.id/ai-tools/suno?title=${encodeURIComponent(title)}&lyrics=${encodeURIComponent(lyrics)}&style=${encodeURIComponent(style)}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-  return response.json();
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
+  
+  if (!response.ok) {
+    throw new Error(`API request failed with status ${response.status}`);
+  }
+  
+  const data = await response.json();
+  
+  if (!data.jobId || !data.task_url) {
+    throw new Error('Invalid response from music generation API, sir.');
+  }
+  
+  return {
+    jobId: data.jobId,
+    task_url: data.task_url
+  };
 };
 
 export const checkTaskStatus = async (taskUrl: string): Promise<TaskRecord[]> => {
   while (true) {
-    const response = await fetch(taskUrl);
-    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+    const response = await fetch(taskUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Task status request failed with status ${response.status}`);
+    }
+    
     const taskData: TaskStatusResponse = await response.json();
-    if (taskData.status === "done") return taskData.records.slice(0, 2);
+    
+    if (taskData.status === 'done') {
+      if (Array.isArray(taskData.records) && taskData.records.length > 0) {
+        return taskData.records.slice(0, 2); // only return first 2 songs
+      } else {
+        throw new Error('No records found in completed task, sir.');
+      }
+    }
+    
+    if (taskData.status === 'error') {
+      throw new Error('Task processing failed on server side, sir.');
+    }
+    
+    // Wait before next check
     await new Promise(resolve => setTimeout(resolve, 5000));
   }
 };
